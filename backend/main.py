@@ -1,6 +1,6 @@
 import logging
-from app.setup.factory import create_app
-from app.config.settings import settings
+from backend.app.setup.factory import create_app
+from backend.app.config.settings import settings
 
 
 app = create_app()
@@ -18,7 +18,6 @@ if __name__ == "__main__":
 
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
         reload=True,
         port=settings.general.HOST_PORT,
     )

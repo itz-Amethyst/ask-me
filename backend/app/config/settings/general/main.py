@@ -2,9 +2,8 @@ import secrets
 from pathlib import Path
 from typing import List , Union
 # Todo check beshe
-from pydantic import AnyHttpUrl , field_validator
+from pydantic import AnyHttpUrl , BaseSettings
 from backend.app import __version__
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from backend.app.config.settings.helper import config
 
 class General(BaseSettings):
@@ -20,13 +19,8 @@ class General(BaseSettings):
 
     PROJECT_NAME: str = config.get("PROJECT_NAME" , "")
 
-    @classmethod
-    @field_validator("BACKEND_CORS_ORIGINS" , mode = "before")
-    def assemble_cors_origins( cls , v: Union[str , List[str]] ) -> Union[List[str] , str]:
-        if isinstance(v , str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v , (list , str)):
-            return v
-        raise ValueError(v)
+    CLOUDFLARE_ACCOUNT_ID: str = config.get("CLOUDFLARE_ACCOUNT_ID", "")
+
+    CLOUDFLARE_API_TOKEN: str = config.get("CLOUDFLARE_ACCOUNT_ID", "")
 
 
