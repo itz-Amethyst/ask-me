@@ -26,22 +26,26 @@ const ChatPage = () => {
 		setShowMessage(true);
 		setIsLoading(true)
 
-		// Simulate loading for 1 second
-		setTimeout(() => {
-			const userMessage = { content: message, sender: 'user' };
+		axios.post('http://127.0.0.1:8000/api/chat', {content: message})
+			.then(response => {
+                setIsLoading(false);
+				console.log(response)
 
-			// Later, you would replace this with the response from the bot retrieved via Axios
-			const botResponse = 'This is from bot';
+                // Update the messages state if needed
+                const userMessage = { content: message, sender: 'user' };
+                const botMessage = { content: response.data.content, sender: 'bot' };
+                setMessages([...messages, userMessage, botMessage]);
+				console.log(messages)
+			})
+			.catch(error => {
+                console.error('Error:', error);
+                setIsLoading(false);
+                setShowMessage(false);
+            });
 
-			// Create a new message object for the bot's response
-			const botMessage = { content: botResponse, sender: 'bot' };
 
-			setMessages([...messages, userMessage, botMessage]);
-			setIsLoading(false)
-
-			// Clear the input field
-			setMessage('');
-		}, 1000);
+		setMessage('');
+		
 	};
 
 

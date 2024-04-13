@@ -12,6 +12,8 @@ const WhisperPage = () => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
+    const [file, setFile] = useState(null);
+
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter') {
@@ -20,36 +22,49 @@ const WhisperPage = () => {
 		}
 	};
 
-	const handleFile = (e) => {
-		const file = e.target.files[0];
-		if (file) {
-			// Read the file content
-			const reader = new FileReader();
-			reader.onload = function(event) {
-				// Set the file content to the message state
-				setMessage(event.target.result);
-			};
-			reader.readAsDataURL(file);
-			console.log(reader)
-		}
-	};
+    const handleFile = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+		console.log(selectedFile)
+    };
 
-	// main
-	const handleSubmit = () => {
-		setShowMessage(true);
-		setIsLoading(true)
+    const handleSubmit = () => {
+        if (!file) {
+            console.log('Please select a file');
+            return;
+        }
 
-		// Simulate loading for 1 second
-		setTimeout(() => {
-			
+        setIsLoading(true);
 
-			setMessages([...messages, message]);
-			setIsLoading(false)
+        const formData = new FormData();
+        formData.append('file', file);
+		
 
-			// Clear the input field
-			setMessage('');
-		}, 1000);
-	};
+        axios.post('http://127.0.0.1:8000/api/whisper', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                setIsLoading(false);
+                console.log(response);
+
+                // Update the messages state if needed
+                const userMessage = { content: file.name, sender: 'user' };
+                const botMessage = { content: response.data.extracted_text, word_count: response.data.word_count, sender: 'bot' };
+                setMessages([...messages, userMessage, botMessage]);
+                console.log(messages);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                setIsLoading(false);
+                setShowMessage(false);
+            });
+
+        setShowMessage(true);
+        setFile(null);
+    };
+
 	
 
 	return (

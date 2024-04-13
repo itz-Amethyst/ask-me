@@ -28,80 +28,49 @@ const NFTPage = () => {
 		setShowMessage(true);
 		setIsLoading(true)
 
-		// Simulate loading for 1 second
-		setTimeout(() => {
-			setIsLoading(false);
-			// later get from
-			// Create a new message object for the user's message
-			const userMessage = { content: message, sender: 'user' };
+		axios.post('http://127.0.0.1:8000/api/nft', {content: message})
+			.then(response => {
+                setIsLoading(false);
+				console.log(response)
 
-			// Later, you would replace this with the response from the bot retrieved via Axios
-			const botResponse = '/empty.png';
+                // Update the messages state if needed
+                const userMessage = { content: message, sender: 'user' };
+                const botMessage = { nft_image: `data:image/png;base64, ${response.data.nft_image}`, sender: 'bot' };
+                setMessages([...messages, userMessage, botMessage]);
+				console.log(messages)
+			})
+			.catch(error => {
+                console.error('Error:', error);
+                setIsLoading(false);
+                setShowMessage(false);
+            });
 
-			// Create a new message object for the bot's response
-			const botMessage = { imageUrl: botResponse, sender: 'bot' };
 
-			setMessages([...messages, userMessage, botMessage]);
-
-			// Clear the input field
-			setMessage('');
-		}, 1000);
+		setMessage('');
+		
 	};
 
 	// Improve
 	const handleButtonClick = () => {
-		const inputValue = message + ' end'; // Append "end" to the input value
-		setMessage(inputValue);
-		setMessages([...messages, inputValue]);
+		setIsLoading(true)
+
+		axios.post('http://127.0.0.1:8000/api/improve', {content: message})
+			.then(response => {
+                setIsLoading(false);
+				console.log(response)
+
+                // Update the messages state if needed
+                setMessage(response.data.content)
+				console.log(messages)
+			})
+			.catch(error => {
+                console.error('Error:', error);
+                setIsLoading(false);
+            });
+
+
 	};
 
-	const router = useRouter();
-	// type messages = {
-	// 	role: string;
-	// 	content: string;
-	// };
-	// // this will get the message from resopnse and store it not what i want
-	// const [messages, setMessages] = useState<messages[]>([]);
-
-	// const form = useForm<z.infer<typeof formSchema>>({
-	// 	resolver: zodResolver(formSchema),
-	// 	defaultValues: {
-	// 		prompt: "",
-	// 	},
-	// });
-
-
-	// const handleSubmit = () => {
-	// 	setShowMessage(true);
-	// 	setShowLoading(true)
-	// 	setTimeout(() => {
-	// 		setShowLoading(false);
-	// 		setMessages([...messages, message]);
-	// 		setMessage('');
-	// 	}, 1000); // 1 second timer
-	// };
-
-	// generate this later for buttons
-	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		// try {
-		// 	const userMessage = { role: "user", content: values.prompt };
-
-		// 	const response = await axios.post("/api/code", { messages: userMessage });
-
-		// 	const res = { role: "assistant", content: response.data };
-
-		// 	setMessages((current) => [...current, userMessage, res]);
-
-		// } catch (error: any) {
-		// 	if (error?.response?.status === 403) {
-		// 		return
-		// 	} else {
-		// 		toast.error("Something went wrong.");
-		// 	}
-		// } finally {
-		// 	router.refresh();
-		// }
-	};
 	return (
 		<>
 			{isLoading && (
@@ -131,73 +100,10 @@ const NFTPage = () => {
 					</div>
 				</div>
 
-				{/* This is for quote */}
-				<div className="flex px-4 py-3">
-					<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
-					<div className="ml-2 flex-grow">
-						<div className="-mt-1">
-							<span className="text-sm font-semibold">User</span>
-						</div>
-						<p className="text-sm">Strangers from distant lands, friends of old. You have been summoned here to answer the threat of Mordor. Middle-Earth stands upon the brink of destruction. None can escape it. You will unite or you will fall. Each race is bound to this fate–this one doom. (gestures to the pedestal) Bring forth the Ring, Frodo.</p>
-					</div>
-					<div className="ml-2 flex-shrink-0">
-						<img src="/empty.png" alt="Image" className="h-80 w-80 rounded-full" />
-					</div>
-				</div>
-
-				{/* Image by bot */}
-				<div className="flex px-4 py-3">
-					<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
-					<div className="ml-2">
-						<div className="-mt-1">
-							<span className="text-sm font-semibold">User</span>
-						</div>
-					</div>
-					<div className="ml-2">
-						<img src="/empty.png" alt="Image" className="h-80 w-80 rounded-full" />
-					</div>
-				</div>
-
 				<div className="flex flex-col items-center mt-2">
 
 				</div>
-				<div className="flex px-4 py-3">
-					<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
-					<div className="ml-2">
-						<div className="-mt-1">
-							<span className="text-sm font-semibold">User</span>
-							<span className="ml-1 text-xs text-gray-500">01:26</span>
-						</div>
-						<p className="text-sm">Strangers from distant lands, friends of old. You have been summoned here to answer the threat of Mordor. Middle-Earth stands upon the brink of destruction. None can escape it. You will unite or you will fall. Each race is bound to this fate–this one doom. (gestures to the pedestal) Bring forth the Ring, Frodo.</p>
-
-					</div>
-				</div>
-
-				{/* {showMessage && !isLoading && (
-					<div className="flex px-4 py-3">
-						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
-						<div className="ml-2">
-							<div className="-mt-1">
-								<span className="text-sm font-semibold">User</span>
-								<span className="ml-1 text-xs text-gray-500">01:26</span>
-							</div>
-							<p className="text-sm">{message}</p>
-						</div>
-					</div>
-				)} */}
-
-				{/* {showMessage && messages.map((msg, index) => (
-					<div key={index} className="flex px-4 py-3">
-						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
-						<div className="ml-2">
-							<div className="-mt-1">
-								<span className="text-sm font-semibold">User</span>
-								<span className="ml-1 text-xs text-gray-500">01:26</span>
-							</div>
-							<p className="text-sm">{msg.content}</p>
-						</div>
-					</div>
-				))} */}
+	
 				{showMessage && messages.map((msg, index) => (
 					<div key={index} className="flex px-4 py-3">
 						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
@@ -210,7 +116,7 @@ const NFTPage = () => {
 								<p className="text-sm">{msg.content}</p>
 							) : (
 								<div className="ml-2 flex-shrink-0">
-									<img src={msg.imageUrl} alt="Image" className="h-80 w-80 rounded-full" />
+									<img src={msg.nft_image} alt="Image" className="h-80 w-80 rounded-sm" />
 								</div>
 							)}
 						</div>
