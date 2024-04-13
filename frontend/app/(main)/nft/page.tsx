@@ -2,24 +2,11 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { Code } from "lucide-react";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { toast } from "react-hot-toast";
-import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/navigation";
 
-import { BotAvatar } from "@/components/bot-avatar";
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
 import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
 
-import { formSchema } from "./constants";
 import Image from 'next/image'
 
 const NFTPage = () => {
@@ -28,6 +15,13 @@ const NFTPage = () => {
 	const [messages, setMessages] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
 	const photoUrl = '/empty.png'
+
+	const handleKeyDown = (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault(); // Prevent the default form submission behavior
+			handleSubmit(); // Call the handleSubmit function
+		}
+	};
 
 	// main
 	const handleSubmit = () => {
@@ -233,7 +227,7 @@ const NFTPage = () => {
 							<path stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
 						</svg>
 					</button>
-					<input disabled={isLoading} value={message} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message council-of-elrond" cols="" rows="1"></input>
+					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message council-of-elrond" cols="" rows="1"></input>
 
 
 					<button disabled={isLoading} className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" onClick={handleSubmit}>
@@ -245,103 +239,6 @@ const NFTPage = () => {
 			</div>
 		</>
 	)
-
-	return (
-		<div>
-			<Heading
-				title="Code Generation"
-				description="Generate code using descriptive text."
-				icon={Code}
-				iconColor="text-green-700"
-				bgColor="bg-green-700/10"
-			/>
-			<div className="px-4 lg:px-8">
-				<div>
-					<Form {...form}>
-						<form
-							onSubmit={form.handleSubmit(onSubmit)}
-							className="
-                rounded-lg 
-                border 
-                w-full 
-                p-4 
-                px-3 
-                md:px-6 
-                focus-within:shadow-sm
-                grid
-                grid-cols-12
-                gap-2
-              "
-						>
-							<FormField
-								name="prompt"
-								render={({ field }) => (
-									<FormItem className="col-span-12 lg:col-span-10">
-										<FormControl className="m-0 p-0">
-											<Input
-												className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-												disabled={isLoading}
-												placeholder="Simple toggle button using react hooks."
-												{...field}
-											/>
-										</FormControl>
-									</FormItem>
-								)}
-							/>
-							<Button
-								className="col-span-12 lg:col-span-2 w-full"
-								type="submit"
-								disabled={isLoading}
-								size="icon"
-							>
-								Generate
-							</Button>
-						</form>
-					</Form>
-				</div>
-				<div className="space-y-4 mt-4">
-					{isLoading && (
-						<div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
-							<Loader />
-						</div>
-					)}
-					{messages.length === 0 && !isLoading && (
-						<Empty label="No conversation started." />
-					)}
-					<div className="flex flex-col-reverse gap-y-4">
-						{messages.map((message, i) => (
-							<div
-								key={i + "77"}
-								className={cn(
-									"p-8 w-full flex items-start gap-x-8 rounded-lg",
-									message.role === "user"
-										? "bg-white border border-black/10"
-										: "bg-muted"
-								)}
-							>
-								{message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-								<ReactMarkdown
-									components={{
-										pre: ({ node, ...props }) => (
-											<div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
-												<pre {...props} />
-											</div>
-										),
-										code: ({ node, ...props }) => (
-											<code className="bg-black/10 rounded-lg p-1" {...props} />
-										),
-									}}
-									className="text-sm overflow-hidden leading-7"
-								>
-									{message.content || ""}
-								</ReactMarkdown>
-							</div>
-						))}
-					</div>
-				</div>
-			</div>
-		</div>
-	);
 };
 
 export default NFTPage;

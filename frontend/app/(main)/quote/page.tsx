@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 import { Loader } from "@/components/loader";
 
-import { formSchema } from "./constants";
 
 const QuotePage = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +15,13 @@ const QuotePage = () => {
 	const [messages, setMessages] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
 	const photoUrl = '/empty.png'
+
+	const handleKeyDown = (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault(); // Prevent the default form submission behavior
+			handleSubmit(); // Call the handleSubmit function
+		}
+	};
 
 	// main
 	const handleSubmit = () => {
@@ -191,7 +197,7 @@ const QuotePage = () => {
 
 			<div className="h-12 bg-white px-5 pb-4 text-x ">
 				<div className="flex items-center border-2 border-gray-300 rounded-sm p-1">
-					<button disabled={isLoading} value={message} onClick={handleSubmit} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1 bg-violet-500" style={{ resize: 'none' }} placeholder="Message council-of-elrond">
+					<button disabled={isLoading} value={message} onKeyDown={handleKeyDown} onClick={handleSubmit} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1 bg-violet-500" style={{ resize: 'none' }} placeholder="Message council-of-elrond">
 						Send
 					</button>
 

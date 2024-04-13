@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Montserrat } from 'next/font/google'
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -65,6 +64,30 @@ export const Sidebar = () => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
             </svg>
             <span className="ml-2 leading-none font-semibold">AI Assistant</span>
+          </Link>
+
+          <Link className={cn("flex items-center h-12 hover:bg-gray-300 text-s px-3 mt-2", pathname === '/whisper' ? "text-white bg-black/70" : "text-black/50",)} href="/whisper">
+            <svg fill="none" viewBox="0 0 15 15" className="h-10 w-10">
+              <path fill="currentColor" d="M7 10a1 1 0 10-2 0 1 1 0 002 0z" />
+              <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M1 1.5A1.5 1.5 0 012.5 0h8.207L14 3.293V13.5a1.5 1.5 0 01-1.5 1.5h-10A1.5 1.5 0 011 13.5v-12zm6.342 2.526A.5.5 0 017.9 4.2l.3.4A3.5 3.5 0 0011 6v1a4.5 4.5 0 01-3-1.146V10a2 2 0 11-1-1.732V4.5a.5.5 0 01.342-.474z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="ml-2 leading-none font-semibold">Voice To Text</span>
+          </Link>
+
+          <Link className={cn("flex items-center h-12 hover:bg-gray-300 text-s px-3 mt-2", pathname === '/translate' ? "text-white bg-black/70" : "text-black/50",)} href="/translate">
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-10 w-10"
+            >
+              <path d="M20 5h-9.12L10 2H4a2 2 0 00-2 2v13a2 2 0 002 2h7l1 3h8a2 2 0 002-2V7a2 2 0 00-2-2M7.17 14.59a4.09 4.09 0 01-4.09-4.09 4.09 4.09 0 014.09-4.09c1.04 0 1.99.37 2.74 1.09l.09.04-1.25 1.18-.06-.05c-.29-.27-.78-.59-1.52-.59-1.31 0-2.38 1.09-2.38 2.42 0 1.33 1.07 2.42 2.38 2.42 1.37 0 1.96-.87 2.12-1.46H7.08V9.91h3.95l.01.09c.04.19.05.38.05.59 0 2.35-1.59 4-3.92 4m6.03-1.71c.33.62.74 1.18 1.19 1.7l-.54.53-.65-2.23m.77-.76H13l-.33-1.04h3.99s-.34 1.31-1.56 2.74c-.52-.62-.89-1.23-1.13-1.7M21 20a1 1 0 01-1 1h-7l2-2-.81-2.77.92-.92L17.79 18l.71-.73-2.69-2.68c.9-1.03 1.6-2.25 1.92-3.51H19v-1.04h-3.64V9h-1.04v1.04h-1.96L11.18 6H20a1 1 0 011 1v13z" />
+            </svg>
+            <span className="ml-2 leading-none font-semibold">Translate</span>
           </Link>
 
         </div>

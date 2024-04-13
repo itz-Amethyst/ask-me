@@ -1,14 +1,13 @@
 "use client";
 
-import axios from "axios";
 
+import Image from 'next/image'
+import axios from "axios";
 import { useState } from "react";
 
 import { Loader } from "@/components/loader";
-import Image from 'next/image'
 
-
-const ChatPage = () => {
+const WhisperPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
@@ -21,6 +20,20 @@ const ChatPage = () => {
 		}
 	};
 
+	const handleFile = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			// Read the file content
+			const reader = new FileReader();
+			reader.onload = function(event) {
+				// Set the file content to the message state
+				setMessage(event.target.result);
+			};
+			reader.readAsDataURL(file);
+			console.log(reader)
+		}
+	};
+
 	// main
 	const handleSubmit = () => {
 		setShowMessage(true);
@@ -28,22 +41,16 @@ const ChatPage = () => {
 
 		// Simulate loading for 1 second
 		setTimeout(() => {
-			const userMessage = { content: message, sender: 'user' };
+			
 
-			// Later, you would replace this with the response from the bot retrieved via Axios
-			const botResponse = 'This is from bot';
-
-			// Create a new message object for the bot's response
-			const botMessage = { content: botResponse, sender: 'bot' };
-
-			setMessages([...messages, userMessage, botMessage]);
+			setMessages([...messages, message]);
 			setIsLoading(false)
 
 			// Clear the input field
 			setMessage('');
 		}, 1000);
 	};
-
+	
 
 	return (
 		<>
@@ -85,10 +92,10 @@ const ChatPage = () => {
 						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
 						<div className="ml-2">
 							<div className="-mt-1">
-								<span className="text-sm font-semibold">{msg.sender === 'user' ? 'User' : 'Bot'}</span>
+								<span className="text-sm font-semibold">Bot</span>
 								<span className="ml-1 text-xs text-gray-500">01:26</span>
 							</div>
-							<p className="text-sm">{msg.content}</p>
+							<p className="text-sm">{msg}</p>
 								
 						</div>
 					</div>
@@ -99,8 +106,9 @@ const ChatPage = () => {
 
 			<div className="h-12 bg-white px-5 pb-4 text-x">
 				<div className="flex items-center border-2 border-gray-300 rounded-sm p-1">
-					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message council-of-elrond" cols="" rows="1"></input>
+					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={handleFile} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} type='file' accept='.wav, .mp3, .ogg'></input>
 
+					
 
 					<button disabled={isLoading} className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" onClick={handleSubmit}>
 						<svg className="h-4 w-4 transform rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -113,4 +121,4 @@ const ChatPage = () => {
 	);
 };
 
-export default ChatPage;
+export default WhisperPage;
