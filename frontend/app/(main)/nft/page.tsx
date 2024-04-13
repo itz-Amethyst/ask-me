@@ -27,6 +27,7 @@ const NFTPage = () => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
+	const photoUrl = '/empty.png'
 
 	// main
 	const handleSubmit = () => {
@@ -36,8 +37,20 @@ const NFTPage = () => {
 		// Simulate loading for 1 second
 		setTimeout(() => {
 			setIsLoading(false);
-			setMessages([...messages, message]); // Append the new message to the existing array
-			setMessage(''); // Clear the input field
+			// later get from
+			// Create a new message object for the user's message
+			const userMessage = { content: message, sender: 'user' };
+
+			// Later, you would replace this with the response from the bot retrieved via Axios
+			const botResponse = '/empty.png';
+
+			// Create a new message object for the bot's response
+			const botMessage = { imageUrl: botResponse, sender: 'bot' };
+
+			setMessages([...messages, userMessage, botMessage]);
+
+			// Clear the input field
+			setMessage('');
 		}, 1000);
 	};
 
@@ -179,7 +192,7 @@ const NFTPage = () => {
 					</div>
 				)} */}
 
-				{showMessage && messages.map((msg, index) => (
+				{/* {showMessage && messages.map((msg, index) => (
 					<div key={index} className="flex px-4 py-3">
 						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
 						<div className="ml-2">
@@ -187,7 +200,25 @@ const NFTPage = () => {
 								<span className="text-sm font-semibold">User</span>
 								<span className="ml-1 text-xs text-gray-500">01:26</span>
 							</div>
-							<p className="text-sm">{msg}</p>
+							<p className="text-sm">{msg.content}</p>
+						</div>
+					</div>
+				))} */}
+				{showMessage && messages.map((msg, index) => (
+					<div key={index} className="flex px-4 py-3">
+						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
+						<div className="ml-2">
+							<div className="-mt-1">
+								<span className="text-sm font-semibold">{msg.sender === 'user' ? 'User' : 'Bot'}</span>
+								<span className="ml-1 text-xs text-gray-500">01:26</span>
+							</div>
+							{msg.sender === 'user' ? (
+								<p className="text-sm">{msg.content}</p>
+							) : (
+								<div className="ml-2 flex-shrink-0">
+									<img src={msg.imageUrl} alt="Image" className="h-80 w-80 rounded-full" />
+								</div>
+							)}
 						</div>
 					</div>
 				))}
