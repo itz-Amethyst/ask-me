@@ -5,7 +5,7 @@ import requests
 from fastapi import FastAPI, APIRouter, UploadFile
 from starlette.middleware.cors import CORSMiddleware
 
-from schemas import ChatSchema, NFTSchema, NFTResponse, QuoteResponse, TranslateSchema, WhisperResponse
+from schemas import ChatSchema, NFTSchema, NFTResponse, QuoteResponse, TranslateSchema, WhisperResponse, NFTImproveResponse
 from env import CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN
 
 
@@ -52,7 +52,7 @@ def get_quote(chat_schema: ChatSchema):
 @router.post("/nft")
 def create_nft(nft_schema: NFTSchema):
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/bytedance/stable-diffusion-xl-lightning"
-    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"}
+    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", }
     json_data = {"prompt": nft_schema.content}
     result = make_request(url, "POST", headers, json_data)
     image_data = base64.b64encode(result).decode('utf-8')
@@ -70,7 +70,7 @@ def improve_nft_command(nft_schema: NFTSchema):
         ]
     }
     result = make_request(url, "POST", headers, json_data)
-    return NFTSchema(content=result['result']['response'])
+    return NFTImproveResponse(content=result['result']['response'])
 
 
 @router.get("/quote/")

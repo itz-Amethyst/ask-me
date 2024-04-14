@@ -8,7 +8,10 @@ class ChatSchema(BaseModel):
 
 class NFTSchema(BaseModel):
     content: str
-    nft_image: Optional[Any]
+
+class NFTImproveResponse(BaseModel):
+    content: str
+
 
 class TranslateSchema(BaseModel):
     # Translated / main content
