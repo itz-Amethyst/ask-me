@@ -52,7 +52,7 @@ def get_quote(chat_schema: ChatSchema):
 @router.post("/nft")
 def create_nft(nft_schema: NFTSchema):
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/bytedance/stable-diffusion-xl-lightning"
-    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "content-type": "image/png"}
+    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"}
     json_data = {"prompt": nft_schema.content}
     result = make_request(url, "POST", headers, json_data)
     image_data = base64.b64encode(result).decode('utf-8')
