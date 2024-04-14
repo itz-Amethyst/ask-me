@@ -1,4 +1,0 @@
-name = "hello-fastapi"
-main = "src/main.py"
-compatibility_flags = ["python_workers"]
-compatibility_date = "2024-01-29"
