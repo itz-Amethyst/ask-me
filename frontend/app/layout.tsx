@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Infinite AI",
-  description: "Infinite Ai is a platform that can generate images, code, translation and chat with cloudflare's open models.",
+  title: "Ask-Me",
+  description: "Your go-to for personalized NFT creation , quotes with it author image translate any context into English, can Identify the text inside an audio file",
 };
 
 export default function RootLayout({

@@ -1,20 +1,18 @@
 "use client";
 
-import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Loader } from "@/components/loader";
-
 import Image from 'next/image'
+import { BASE_URL } from "@/lib/route"
+
 
 const NFTPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
-	const photoUrl = '/empty.png'
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter') {
@@ -28,7 +26,8 @@ const NFTPage = () => {
 		setShowMessage(true);
 		setIsLoading(true)
 
-		axios.post('http://127.0.0.1:8000/api/nft', {content: message})
+		console.log(`${BASE_URL}/api/nft`)
+		axios.post(`${BASE_URL}/api/nft`, {content: message})
 			.then(response => {
                 setIsLoading(false);
 				console.log(response)
@@ -54,14 +53,11 @@ const NFTPage = () => {
 	const handleButtonClick = () => {
 		setIsLoading(true)
 
-		axios.post('http://127.0.0.1:8000/api/improve', {content: message})
+		axios.post(`${BASE_URL}/api/improve`, {content: message})
 			.then(response => {
                 setIsLoading(false);
-				console.log(response)
 
-                // Update the messages state if needed
                 setMessage(response.data.content)
-				console.log(messages)
 			})
 			.catch(error => {
                 console.error('Error:', error);
@@ -81,8 +77,8 @@ const NFTPage = () => {
 			<div className="flex flex-col flex-grow overflow-auto">
 				<div className="flex px-4 py-3">
 					<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300">
-						<div className="w-10 h-10 relative animate-pulse">
-							<Image src="/loading_one_icon_155179.png" alt="Sam" className="h-6 w-6 rounded-full" fill />
+						<div className="w-10 h-10 relative">
+							<Image src="/bot.png" alt="Sam" className="h-6 w-6 rounded-full" fill />
 						</div>
 					</div>
 					<div className="ml-2">
@@ -90,7 +86,9 @@ const NFTPage = () => {
 							<span className="text-sm font-semibold">BOT</span>
 
 						</div>
-						<p className="text-sm">Anyone know if Frodo is awake yet?</p>
+						<p className="text-sm">
+							Have you ever admired an NFT or desired to own one consistently? I specialize in crafting high-quality NFTs tailored to your preferences<br></br>
+							If you are unsure how to articulate your vision, dont worry! I offer a button that enhances your instructions effortlessly</p>
 						<div className="flex space-x-2 mt-1">
 							<button className="flex items-center pl-1 pr-2 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-xs">
 								<span>🔥</span>
@@ -106,11 +104,12 @@ const NFTPage = () => {
 	
 				{showMessage && messages.map((msg, index) => (
 					<div key={index} className="flex px-4 py-3">
-						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
+						<div className="w-10 h-10 relative">
+							<Image src="/user.png" alt="user" className="h-6 w-6 rounded-full" fill />
+						</div>
 						<div className="ml-2">
 							<div className="-mt-1">
 								<span className="text-sm font-semibold">{msg.sender === 'user' ? 'User' : 'Bot'}</span>
-								<span className="ml-1 text-xs text-gray-500">01:26</span>
 							</div>
 							{msg.sender === 'user' ? (
 								<p className="text-sm">{msg.content}</p>
@@ -130,10 +129,10 @@ const NFTPage = () => {
 				<div className="flex items-center border-2 border-gray-300 rounded-sm p-1">
 					<button disabled={isLoading} className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" onClick={handleButtonClick}>
 						<svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
 						</svg>
 					</button>
-					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message council-of-elrond" cols="" rows="1"></input>
+					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message to bot"></input>
 
 
 					<button disabled={isLoading} className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" onClick={handleSubmit}>

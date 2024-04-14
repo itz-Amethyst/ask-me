@@ -61,7 +61,7 @@ export const Sidebar = () => {
 
           <Link className={cn("flex items-center h-12 hover:bg-gray-300 text-s px-3 mt-2", pathname === '/chat' ? "text-white bg-black/70" : "text-black/50",)} href="/chat">
             <svg className="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              <path strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
             </svg>
             <span className="ml-2 leading-none font-semibold">AI Assistant</span>
           </Link>

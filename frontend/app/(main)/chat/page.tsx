@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { Loader } from "@/components/loader";
 import Image from 'next/image'
+import { BASE_URL } from "@/lib/route"
 
 
 const ChatPage = () => {
@@ -16,8 +17,8 @@ const ChatPage = () => {
 
 	const handleKeyDown = (e) => {
 		if (e.key === 'Enter') {
-			e.preventDefault(); // Prevent the default form submission behavior
-			handleSubmit(); // Call the handleSubmit function
+			e.preventDefault();
+			handleSubmit();
 		}
 	};
 
@@ -26,16 +27,13 @@ const ChatPage = () => {
 		setShowMessage(true);
 		setIsLoading(true)
 
-		axios.post('http://127.0.0.1:8000/api/chat', {content: message})
+		axios.post(`${BASE_URL}/api/chat`, {content: message})
 			.then(response => {
                 setIsLoading(false);
-				console.log(response)
 
-                // Update the messages state if needed
                 const userMessage = { content: message, sender: 'user' };
                 const botMessage = { content: response.data.content, sender: 'bot' };
                 setMessages([...messages, userMessage, botMessage]);
-				console.log(messages)
 			})
 			.catch(error => {
                 console.error('Error:', error);
@@ -59,8 +57,8 @@ const ChatPage = () => {
 			<div className="flex flex-col flex-grow overflow-auto">
 				<div className="flex px-4 py-3">
 					<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300">
-						<div className="w-10 h-10 relative animate-pulse">
-							<Image src="/loading_one_icon_155179.png" alt="Sam" className="h-6 w-6 rounded-full" fill />
+						<div className="w-10 h-10 relative">
+							<Image src="/bot.png" alt="Sam" className="h-6 w-6 rounded-full" fill />
 						</div>
 					</div>
 					<div className="ml-2">
@@ -68,11 +66,11 @@ const ChatPage = () => {
 							<span className="text-sm font-semibold">BOT</span>
 
 						</div>
-						<p className="text-sm">Anyone know if Frodo is awake yet?</p>
+						<p className="text-sm">(A friendly AI asisstant bot with a bit sense of humor) How can i help?</p>
 						<div className="flex space-x-2 mt-1">
 							<button className="flex items-center pl-1 pr-2 h-5 bg-gray-300 hover:bg-gray-400 rounded-full text-xs">
 								<span>🔥</span>
-								<span className="ml-1 font-medium">2</span>
+								<span className="ml-1 font-medium">4</span>
 							</button>
 						</div>
 					</div>
@@ -86,11 +84,12 @@ const ChatPage = () => {
 
 				{showMessage && messages.map((msg, index) => (
 					<div key={index} className="flex px-4 py-3">
-						<div className="h-10 w-10 rounded flex-shrink-0 bg-gray-300"></div>
+						<div className="w-10 h-10 relative">
+							<Image src="/user.png" alt="user" className="h-6 w-6 rounded-full" fill />
+						</div>
 						<div className="ml-2">
 							<div className="-mt-1">
 								<span className="text-sm font-semibold">{msg.sender === 'user' ? 'User' : 'Bot'}</span>
-								<span className="ml-1 text-xs text-gray-500">01:26</span>
 							</div>
 							<p className="text-sm">{msg.content}</p>
 								
@@ -103,7 +102,7 @@ const ChatPage = () => {
 
 			<div className="h-12 bg-white px-5 pb-4 text-x">
 				<div className="flex items-center border-2 border-gray-300 rounded-sm p-1">
-					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message council-of-elrond" cols="" rows="1"></input>
+					<input disabled={isLoading} value={message} onKeyDown={handleKeyDown} onChange={(e) => setMessage(e.target.value)} className="flex-grow text-sm px-3 border-l border-gray-300 ml-1" style={{ resize: 'none' }} placeholder="Message to bot"></input>
 
 
 					<button disabled={isLoading} className="flex-shrink flex items-center justify-center h-6 w-6 rounded hover:bg-gray-200" onClick={handleSubmit}>

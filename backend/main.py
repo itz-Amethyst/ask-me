@@ -1,4 +1,5 @@
 import base64
+import json
 import random
 from typing import Any
 
@@ -147,22 +148,40 @@ def translate(translate_schema: TranslateSchema):
 
     return TranslateSchema(content=data)
 
+# @router.post("/whisper")
+# def extract(file = File(...)):
+#     # res = requests.get(
+#     #     "https://github.com/Azure-Samples/cognitive-services-speech-sdk/raw/master/samples/cpp/windows/console/samples/enrollment_audio_katie.wav"
+#     # )
+#     # print(file)
+#     file_conent = file.read()
+#     # blob = res.content
+#
+#     response = requests.post(
+#         f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/openai/whisper",
+#         headers={"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"},
+#         # json = {
+#         #     "audio": list(blob)
+#         # }
+#         data = file
+#     )
+#     if response.status_code != 200:
+#         raise HTTPException(status_code=response.status_code, detail="Error fetching quote")
+#
+#     result = response.json()
+#     data = result['result']['text']
+#     word_count = result['result']['word_count']
+#
+#
+#     return WhisperResponse(extracted_text=data, word_count = word_count)
+
 @router.post("/whisper")
-def extract(file = UploadFile(...)):
-    res = requests.get(
-        "https://github.com/Azure-Samples/cognitive-services-speech-sdk/raw/master/samples/cpp/windows/console/samples/enrollment_audio_katie.wav"
-    )
-    print(file)
-    file_conent = file.file.read()
-    blob = res.content
+async def extract(file: UploadFile):
 
     response = requests.post(
         f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/openai/whisper",
         headers={"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}"},
-        # json = {
-        #     "audio": list(blob)
-        # }
-        data = file
+        data = file.file
     )
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="Error fetching quote")
@@ -173,6 +192,7 @@ def extract(file = UploadFile(...)):
 
 
     return WhisperResponse(extracted_text=data, word_count = word_count)
+
 
 app.include_router(router)
 
