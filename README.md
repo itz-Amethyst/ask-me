@@ -1,6 +1,6 @@
 # Ask-me is a service designed to assist with various tasks, such as NFT creation, generating quotes, and translation.
 
-[🔥Live Demo💻](https://www.google.com)
+[🔥Live Demo💻](https://www.google.com](https://ask-me-front-cloudflare.pages.dev/))
 
 ![GIF Demo](https://cdn.discordapp.com/attachments/1113510096622862375/1229167743748538480/Q2-ezgif.com-video-to-gif-converter.gif?ex=662eb2aa&is=661c3daa&hm=d288c303d8a712148b6221c36d018adba39d8fb42bfef29ae3f07cccd88afe4b&)
 
